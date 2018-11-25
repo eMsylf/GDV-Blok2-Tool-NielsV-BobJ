@@ -24,17 +24,17 @@ public class LocalizeWindow : EditorWindow {
 
 		#region Buttons
 		EditorGUILayout.BeginHorizontal ();
-		if (GUILayout.Button("Previous")){
+		if (GUILayout.Button("Previous")) {
 			Debug.Log ("Previous Text");
 			selectedDialog = ((selectedDialog - 1) + totalDialog-2) % (totalDialog-2);
 			Debug.Log(selectedDialog);
 		}
-		if (GUILayout.Button("Next")){
+		if (GUILayout.Button("Next")) {
 			Debug.Log ("Next Text");
 			selectedDialog = (selectedDialog + 1) % (totalDialog-2);
 		}
-		if (GUILayout.Button("Add Lang")){
-			Debug.Log ("Added Language");
+		if (GUILayout.Button("Add Lang")) {
+            Debug.Log ("Added Language");
 			AddLanguageWizard.Create();
 		}
 		EditorGUILayout.EndHorizontal ();
@@ -42,10 +42,10 @@ public class LocalizeWindow : EditorWindow {
 		GUILayout.FlexibleSpace();
 
 		EditorGUILayout.BeginHorizontal ();
-		if (GUILayout.Button("Load Text")){
+		if (GUILayout.Button("Load Text")) {
 			Debug.Log ("Loading All Text...");
 		}
-		if (GUILayout.Button("Save Changes")){
+		if (GUILayout.Button("Save Changes")) {
 			Debug.Log ("Saving Changes");
 			SaveTextDebug(translatedText);
 		}
@@ -76,11 +76,11 @@ public class LocalizeWindow : EditorWindow {
 		#endregion
 	}
 
-	public void SaveTextDebug(string text){
+	public void SaveTextDebug(string text) {
 		Dictionary<int, string> localDialog;
-		if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog)){
+		if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog)) {
 			string dialog;
-			if (localDialog.TryGetValue(selectedDialog, out dialog)){
+			if (localDialog.TryGetValue(selectedDialog, out dialog)) {
 				dialog = text;
 			} else {
 				Debug.LogError ("Developer Speaking, This is not part of the game. Please contact the developer. Error: This dialog does not exist.");
@@ -90,11 +90,11 @@ public class LocalizeWindow : EditorWindow {
 		}
 	}
 
-	public string GetTextDebug(int selectedLanguage, int selectedDialog){
+	public string GetTextDebug(int selectedLanguage, int selectedDialog) {
 		Dictionary<int, string> localDialog;
-		if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog)){
+		if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog)) {
 			string dialog;
-			if (localDialog.TryGetValue(selectedDialog, out dialog)){
+			if (localDialog.TryGetValue(selectedDialog, out dialog)) {
 				return dialog;
 			} else {
 				Debug.LogError ("Developer Speaking, This is not part of the game. Please contact the developer. Error: This dialog does not exist.");
@@ -110,14 +110,14 @@ public class AddLanguageWizard : ScriptableWizard {
 
 	string languageName;
 
-	public static void Create(){
+	public static void Create() {
 		ScriptableWizard.DisplayWizard<AddLanguageWizard>("Screen");
 	}
 
-	void OnGUI(){
+	void OnGUI() {
 		languageName = GUILayout.TextArea (languageName, GUILayout.Height(position.height - 30));
 
-		if (GUILayout.Button("Add")){
+		if (GUILayout.Button("Add")) {
 			LocalizeWindow.localizedLanguages.Add (LocalizeWindow.localizedLanguages.Count ,new Dictionary<int, string>());
 			LocalizeWindow.options.Add (languageName);
 		}
