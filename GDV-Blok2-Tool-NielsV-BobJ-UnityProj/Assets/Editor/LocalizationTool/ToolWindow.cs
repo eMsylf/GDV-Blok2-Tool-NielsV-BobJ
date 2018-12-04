@@ -1,13 +1,17 @@
-﻿using System.Collections;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 public class LocalizeWindow : EditorWindow {
 
-	int selectedLanguage = 0;
-	int selectedDialog = 0;
-	public static int totalDialog = 3;
+    public static DataManager data;
+
+    static string selectedLanguage;
+    static string selectedDialog;
+    int selectPopLanguage = 0;
+    int selectPopDialog = 0;
+    public static int totalDialog = 3;
 	string translatedText = "";
 	public static List<string> options = new List<string>();
 
@@ -18,24 +22,45 @@ public class LocalizeWindow : EditorWindow {
 
 	[MenuItem("Tools/Localization")]
 	public static void Create(){
-		GetWindow<LocalizeWindow> ();
+        selectedLanguage = data.languages.Keys.FirstOrDefault();
+        Dictionary<string, string> outLang;
+        if (data.languages.TryGetValue(selectedLanguage, out outLang))
+        {
+            selectedDialog = outLang.Keys.FirstOrDefault();
+        }
+     
+        GetWindow<LocalizeWindow> ();
 		GetWindow<LocalizeWindow> ().minSize = new Vector2 ( 12 * EditorGUIUtility.singleLineHeight, 18 * EditorGUIUtility.singleLineHeight );
 	}
 
 	void OnGUI(){
 
+        #region ObjectField
+        Object dataObj = null;
+        dataObj = EditorGUILayout.ObjectField(dataObj, typeof(DataManager), false);
+        data = dataObj as DataManager;
+        #endregion
+
         #region Buttons
         EditorGUILayout.BeginHorizontal();
+        Dictionary<string, string> outLang;
+        List<string> popDialog = null;
+        if (data.languages.TryGetValue(selectedLanguage, out outLang))
+        {
+            //selectedDialog = outLang.Keys.FirstOrDefault();
+            popDialog = outLang.Keys.ToList();
+        }
+        //List<string> popLang = data.languages.Keys.ToList();
         if (GUILayout.Button("Previous"))
         {
             Debug.Log("Previous Text");
-            selectedDialog = ((selectedDialog - 1) + totalDialog - 2) % (totalDialog - 2);
+            selectedDialog = popDialog[(selectPopDialog - 1 + totalDialog - 2) % (totalDialog - 2)];
             Debug.Log(selectedDialog);
         }
         if (GUILayout.Button("Next"))
         {
             Debug.Log("Next Text");
-            selectedDialog = (selectedDialog + 1) % (totalDialog - 2);
+            selectedDialog = popDialog[(selectPopDialog + 1) % (totalDialog - 2)];
         }
         if (GUILayout.Button("Add Lang"))
         {
@@ -56,7 +81,7 @@ public class LocalizeWindow : EditorWindow {
         if (GUILayout.Button("Save Changes"))
         {
             Debug.Log("Saving Changes");
-            SaveTextDebug(translatedText);
+            //SaveTextDebug(translatedText);
         }
         EditorGUILayout.EndHorizontal();
         #endregion
@@ -66,14 +91,15 @@ public class LocalizeWindow : EditorWindow {
 
         if (localizedLanguages.Count > 0)
         {
-            selectedLanguage = EditorGUI.Popup(popup, selectedLanguage, options.ToArray());
+            List<string> popLang = data.languages.Keys.ToList();
+            selectedLanguage = popLang[EditorGUI.Popup(popup, selectPopLanguage, options.ToArray())];
         }
         #endregion
 
         #region OriginalText
         GUILayout.BeginArea(new Rect(0, 3 * EditorGUIUtility.singleLineHeight, this.position.width, EditorGUIUtility.singleLineHeight * 6));
         EditorGUILayout.BeginHorizontal();
-        GUILayout.TextArea(GetTextDebug(0, selectedDialog), GUILayout.Height(position.height - 30));
+        GUILayout.TextArea(GetTextDebug(data.languages.Keys.FirstOrDefault(), selectedDialog), GUILayout.Height(position.height - 30));
         EditorGUILayout.EndHorizontal();
         GUILayout.EndArea();
         #endregion
@@ -87,54 +113,83 @@ public class LocalizeWindow : EditorWindow {
         #endregion
     }
 
-    public void SaveTextDebug(string text)
-        {
-            Dictionary<int, string> localDialog;
-            if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog))
-            {
-                string dialog;
-                if (localDialog.TryGetValue(selectedDialog, out dialog))
-                {
-                    dialog = text;
-                }
-                else
-                {
-                    Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This dialog does not exist.");
-                }
-            }
-            else
-            {
-                Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This language does not exist.");
-            }
-        }
+    //public void SaveTextDebug(string text)
+    //{
+    //    Dictionary<int, string> localDialog;
+    //    if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog))
+    //    {
+    //        string dialog;
+    //        if (localDialog.TryGetValue(selectedDialog, out dialog))
+    //        {
+    //            dialog = text;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This dialog does not exist.");
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This language does not exist.");
+    //    }
+    //}
 
-        public string GetTextDebug(int selectedLanguage, int selectedDialog)
+    //public string GetTextDebug(int selectedLanguage, int selectedDialog)
+    //{
+    //    Dictionary<int, string> localDialog;
+    //    if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog))
+    //    {
+    //        string dialog;
+    //        if (localDialog.TryGetValue(selectedDialog, out dialog))
+    //        {
+    //            return dialog;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This dialog does not exist.");
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (localizedLanguages.Count == 0)
+    //        {
+    //            Debug.LogWarning("There is no language present, please click \"Add Lang\" to add a languages to the game.");
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This language does not exist.");
+    //        }
+    //    }
+    //    return null;
+    //}
+
+    public static string GetTextDebug(string selectedLanguage, string selectedDialog)
+    {
+        Dictionary<string, string> outLang = null;
+        if (data.languages.TryGetValue(selectedLanguage, out outLang))
         {
-            Dictionary<int, string> localDialog;
-            if (localizedLanguages.TryGetValue(selectedLanguage, out localDialog))
+            string outDialog;
+            if (outLang.TryGetValue(selectedDialog, out outDialog))
             {
-                string dialog;
-                if (localDialog.TryGetValue(selectedDialog, out dialog))
-                {
-                    return dialog;
-                }
-                else
-                {
-                    Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This dialog does not exist.");
-                }
+                return outDialog;
             }
-            else
-            {
-                if (localizedLanguages.Count == 0)
-                {
-                    Debug.LogWarning("There is no language present, please click \"Add Lang\" to add a languages to the game.");
-                }
-                else
-                {
-                    Debug.LogError("Developer Speaking, This is not part of the game. Please contact the developer. Error: This language does not exist.");
-                }
-            }
-            return null;
         }
+        return null;
+    }
+
+    //public string GetTextDebug(int selectedLanguage, string selectedDialog)
+    //{
+    //    Dictionary<string, string> outLang = null;
+    //    data.languages.FirstOrDefault();
+    //    if (data.languages.TryGetValue(selectedLanguage, out outLang))
+    //    {
+    //        string outDialog;
+    //        if (data.dialogs.TryGetValue(selectedDialog, out outDialog))
+    //        {
+    //            return outDialog;
+    //        }
+    //    }
+    //    return null;
+    //}
 }
 
