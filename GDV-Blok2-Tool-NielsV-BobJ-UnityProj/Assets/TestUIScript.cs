@@ -45,7 +45,7 @@ public class TestUIScript : Editor {
 
 
 
-        EditorGUILayout.TextArea("Testing testing", style);
+        EditorGUILayout.TextArea("Testing testing", style); //Krijg je nullreference? Haal dan deze lijn weg. Groetjes Niels
 
         EditorGUILayout.TagField("aaaaa");
 

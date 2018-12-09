@@ -245,8 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07b44ff9df8bd64e85979336313ed1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armor: 75
-  damage: 62
+  armor: 69
+  damage: 63
   gun: {fileID: 0}
 --- !u!4 &1999698926
 Transform:
