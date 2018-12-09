@@ -22,12 +22,28 @@ public class LocalizeWindow : EditorWindow {
 
 	[MenuItem("Tools/Localization")]
 	public static void Create(){
-        selectedLanguage = data.languages.Keys.FirstOrDefault();
-        Dictionary<string, string> outLang;
-        if (data.languages.TryGetValue(selectedLanguage, out outLang))
+        data = Resources.Load("AllText") as DataManager;
+        if (data.languages != null)
         {
-            selectedDialog = outLang.Keys.FirstOrDefault();
+            selectedLanguage = data.languages.Keys.FirstOrDefault();
+            Debug.Log("not empty");
+
+            Dictionary<string, string> outLang;
+            if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
+            {
+                selectedDialog = outLang.Keys.FirstOrDefault();
+            } else
+            {
+                selectedDialog = "";
+            }
         }
+        //Debug.Log(Resources.Load("AllText") as DataManager);
+        //selectedLanguage = data.languages.Keys.FirstOrDefault();
+        //Dictionary<string, string> outLang;
+        //if (data.languages.TryGetValue(selectedLanguage, out outLang))
+        //{
+        //    selectedDialog = outLang.Keys.FirstOrDefault();
+        //}
      
         GetWindow<LocalizeWindow> ();
 		GetWindow<LocalizeWindow> ().minSize = new Vector2 ( 12 * EditorGUIUtility.singleLineHeight, 18 * EditorGUIUtility.singleLineHeight );
@@ -35,17 +51,17 @@ public class LocalizeWindow : EditorWindow {
 
 	void OnGUI(){
 
-        #region ObjectField
-        Object dataObj = null;
-        dataObj = EditorGUILayout.ObjectField(dataObj, typeof(DataManager), false);
-        data = dataObj as DataManager;
-        #endregion
+        //#region ObjectField
+        //Object dataObj = null;
+        //dataObj = EditorGUILayout.ObjectField(dataObj, typeof(DataManager), false);
+        //data = dataObj as DataManager;
+        //#endregion
 
         #region Buttons
         EditorGUILayout.BeginHorizontal();
         Dictionary<string, string> outLang;
         List<string> popDialog = null;
-        if (data.languages.TryGetValue(selectedLanguage, out outLang))
+        if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
         {
             //selectedDialog = outLang.Keys.FirstOrDefault();
             popDialog = outLang.Keys.ToList();
@@ -166,7 +182,7 @@ public class LocalizeWindow : EditorWindow {
     public static string GetTextDebug(string selectedLanguage, string selectedDialog)
     {
         Dictionary<string, string> outLang = null;
-        if (data.languages.TryGetValue(selectedLanguage, out outLang))
+        if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
         {
             string outDialog;
             if (outLang.TryGetValue(selectedDialog, out outDialog))
