@@ -15,8 +15,8 @@ public class LocalizeWindow : EditorWindow {
 	string translatedText = "";
 	public static List<string> options = new List<string>();
 
-	public static Dictionary<int, string> localizedDialogs = new Dictionary<int, string>();
-	public static Dictionary<int, Dictionary<int, string>> localizedLanguages = new Dictionary<int, Dictionary<int, string>>();
+	//public static Dictionary<int, string> localizedDialogs = new Dictionary<int, string>();
+	//public static Dictionary<int, Dictionary<int, string>> localizedLanguages = new Dictionary<int, Dictionary<int, string>>();
 
 	private static AddLanguageWizard wizard;
 
@@ -105,10 +105,16 @@ public class LocalizeWindow : EditorWindow {
         #region Popup
         Rect popup = new Rect(new Vector2(0, 2 * EditorGUIUtility.singleLineHeight), new Vector2(this.position.width, EditorGUIUtility.singleLineHeight));
 
-        if (localizedLanguages.Count > 0)
+        if (data.languages.Keys.Count > 0)
         {
+            List<string> options = new List<string>(data.languages.Keys);
             List<string> popLang = data.languages.Keys.ToList();
-            selectedLanguage = popLang[EditorGUI.Popup(popup, selectPopLanguage, options.ToArray())];
+            selectPopLanguage = EditorGUI.Popup(popup, selectPopLanguage, options.ToArray());
+            selectedLanguage = popLang[selectPopLanguage];
+        }
+        else
+        {
+            selectedDialog = "";
         }
         #endregion
 
