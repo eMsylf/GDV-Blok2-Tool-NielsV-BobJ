@@ -6,8 +6,11 @@ public class AddLanguageWizard : EditorWindow {
 
 	string languageName;
 
-	public static void Create(){
-		GetWindow<AddLanguageWizard>();
+    private static AddLanguageWizard wizard;
+
+    public static void Create(string title){
+		wizard = GetWindow<AddLanguageWizard>(title);
+        wizard.Show();
 	}
 
 	void OnGUI(){
@@ -19,7 +22,7 @@ public class AddLanguageWizard : EditorWindow {
 			LocalizeWindow.data.languages.Add (languageName, new Dictionary<string, string>());
             LocalizeWindow.options.Add(languageName);
             this.Close();
-            Debug.Log("hoi");
+            Debug.Log("Added new language: " + languageName);
         }
 
 	}

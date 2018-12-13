@@ -45,7 +45,7 @@ public class LocalizeWindow : EditorWindow {
         //    selectedDialog = outLang.Keys.FirstOrDefault();
         //}
      
-        GetWindow<LocalizeWindow> ();
+        GetWindow<LocalizeWindow> ("Localization");
 		GetWindow<LocalizeWindow> ().minSize = new Vector2 ( 12 * EditorGUIUtility.singleLineHeight, 18 * EditorGUIUtility.singleLineHeight );
 	}
 
@@ -78,11 +78,12 @@ public class LocalizeWindow : EditorWindow {
             Debug.Log("Next Text");
             selectedDialog = popDialog[(selectPopDialog + 1) % (totalDialog - 2)];
         }
-        if (GUILayout.Button("Add Lang"))
+        if (GUILayout.Button("Add Language"))
         {
-            Debug.Log("Added Language");
-            wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
-            wizard.Show();
+            Debug.Log("Opening new language window");
+            //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
+            AddLanguageWizard.Create("Add Language");
+            
         }
 
         EditorGUILayout.EndHorizontal();
