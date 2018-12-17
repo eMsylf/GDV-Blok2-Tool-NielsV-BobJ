@@ -82,6 +82,7 @@ public class LocalizeWindow : EditorWindow {
         {
             Debug.Log("Added Language");
             wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
+            //wizard.titleContent = GUIContent;
             wizard.Show();
         }
 

@@ -7,7 +7,7 @@ public class AddLanguageWizard : EditorWindow {
 	string languageName;
 
 	public static void Create(){
-		GetWindow<AddLanguageWizard>();
+		GetWindow<AddLanguageWizard>("Bob");
 	}
 
 	void OnGUI(){
