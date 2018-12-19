@@ -9,8 +9,8 @@ public class LocalizeWindow : EditorWindow {
 
     static string selectedLanguage;
     static string selectedDialog;
-    int selectPopLanguage = 0;
-    int selectPopDialog = 0;
+    int selectedPopupLanguage = 0;
+    int selectedPopupDialog = 0;
     public static int totalDialog = 3;
 	string translatedText = "";
 	public static List<string> options = new List<string>();
@@ -49,7 +49,7 @@ public class LocalizeWindow : EditorWindow {
 		GetWindow<LocalizeWindow> ().minSize = new Vector2 ( 12 * EditorGUIUtility.singleLineHeight, 18 * EditorGUIUtility.singleLineHeight );
 	}
 
-	void OnGUI(){
+	public void OnGUI(){
 
         //#region ObjectField
         //Object dataObj = null;
@@ -84,12 +84,12 @@ public class LocalizeWindow : EditorWindow {
         {
             Debug.Log("Added Language");
             //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
-            AddLanguageWizard.Create();
+            AddLanguageWizard.Create(this);
             //wizard.titleContent = GUIContent;
             //wizard.Show();
             Debug.Log("Opening new language window");
             //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
-            AddLanguageWizard.Create("Add Language");
+            //AddLanguageWizard.Create("Add Language");
         }
 
         EditorGUILayout.EndHorizontal();
@@ -115,12 +115,16 @@ public class LocalizeWindow : EditorWindow {
         if (data.languages.Keys.Count > 0)
         {
             List<string> options = new List<string>(data.languages.Keys);
-            List<string> popLang = data.languages.Keys.ToList();
-            selectPopLanguage = EditorGUI.Popup(popup, selectPopLanguage, options.ToArray());
-            selectedLanguage = popLang[selectPopLanguage];
+            List<string> popupLang = data.languages.Keys.ToList();
+            selectedPopupLanguage = EditorGUI.Popup(popup, selectedPopupLanguage, options.ToArray());
+            selectedLanguage = popupLang[selectedPopupLanguage];
         }
         else
         {
+            List<string> leeg = new List<string>() {
+                "<list is empty>"
+            };
+            EditorGUI.Popup(popup, selectedPopupLanguage, leeg.ToArray());
             selectedDialog = "";
         }
         #endregion
