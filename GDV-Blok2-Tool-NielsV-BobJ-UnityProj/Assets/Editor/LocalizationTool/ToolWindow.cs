@@ -69,7 +69,7 @@ public class LocalizeWindow : EditorWindow {
         //List<string> popLang = data.languages.Keys.ToList();
         if (GUILayout.Button("Previous"))
         {
-            //Debug.Log("Previous Text");
+            // Debug.Log("Previous Text");
             LocalizationManager.PreviousDialog();
             //selectedDialog = popDialog[(selectPopDialog - 1 + totalDialog - 2) % (totalDialog - 2)];
             //Debug.Log(selectedDialog);
@@ -83,9 +83,10 @@ public class LocalizeWindow : EditorWindow {
         if (GUILayout.Button("Add Language"))
         {
             Debug.Log("Added Language");
-            wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
+            //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
+            AddLanguageWizard.Create();
             //wizard.titleContent = GUIContent;
-            wizard.Show();
+            //wizard.Show();
             Debug.Log("Opening new language window");
             //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
             AddLanguageWizard.Create("Add Language");
