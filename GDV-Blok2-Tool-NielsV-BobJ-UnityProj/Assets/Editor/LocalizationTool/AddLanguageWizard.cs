@@ -5,19 +5,15 @@ using System.Collections.Generic;
 public class AddLanguageWizard : EditorWindow {
 
 	string languageName;
+    static LocalizeWindow tool;
 
-    public static void Create()
-    {
+    public static void Create(LocalizeWindow toolWin) {
+        tool = toolWin;
         GetWindow<AddLanguageWizard>("Add Language");
     }
 
     private static AddLanguageWizard wizard;
-
-
-    public static void Create(string title){
-		wizard = GetWindow<AddLanguageWizard>(title);
-        wizard.Show();
-	}
+   
 
 	void OnGUI(){
         Event e = Event.current;
@@ -28,6 +24,7 @@ public class AddLanguageWizard : EditorWindow {
             //LocalizeWindow.data.languages.Add (languageName, new Dictionary<string, string>());
             //         LocalizeWindow.options.Add(languageName);
             LocalizationManager.AddLang(languageName);
+            tool.Repaint();
             this.Close();
             Debug.Log("Added new language: " + languageName);
         }
