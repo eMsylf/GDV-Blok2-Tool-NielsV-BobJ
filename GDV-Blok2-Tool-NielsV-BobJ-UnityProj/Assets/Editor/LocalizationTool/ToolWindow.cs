@@ -111,8 +111,8 @@ public class LocalizeWindow : EditorWindow {
         #endregion
 
         #region Popup
-        Rect popup = new Rect(new Vector2(0, 3 * EditorGUIUtility.singleLineHeight), new Vector2(this.position.width, EditorGUIUtility.singleLineHeight));
-
+        Rect popup = new Rect(new Vector2(this.position.size.x - (2 *standardButtonWidth), 3.2f * EditorGUIUtility.singleLineHeight), new Vector2(2 * standardButtonWidth, EditorGUIUtility.singleLineHeight));
+        
         if (data.languages.Keys.Count > 0)
         {
             List<string> options = new List<string>(data.languages.Keys);
@@ -130,24 +130,28 @@ public class LocalizeWindow : EditorWindow {
         }
         #endregion
 
-        EditorGUILayout.Space();
+        EditorGUILayout.Space(); EditorGUILayout.Space();
 
         #region TextBoxes
         EditorGUILayout.BeginHorizontal();
         { 
             //GUILayout.BeginArea(new Rect(0, 4 * EditorGUIUtility.singleLineHeight, this.position.width, EditorGUIUtility.singleLineHeight * 6));
             EditorGUILayout.BeginVertical();
+            //GUILayout.BeginArea(new Rect(0.0f, minWindowHeight *5, GetWindow<LocalizeWindow>().position.size.x / 2, GetWindow<LocalizeWindow>().position.size.y));
             {
                 EditorGUILayout.LabelField("Original text", EditorStyles.boldLabel);
                 //EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.TextArea(GetTextDebug(data.languages.Keys.FirstOrDefault(), selectedDialog), GUIStyle.none,
+                GUI.skin.label.wordWrap = true;
+                GUILayout.Label("Helo I am Beb and I am a Game Developer right now I'm trying to build a cool looking tool that is kinda easy to use but Unity is being a doodoo and I do not like it.", 
+                    //GUIStyle.none,
                     GUILayout.MinHeight(minTextFieldHeight),
                     GUILayout.MaxHeight(maxTextFieldHeight),
                     GUILayout.MinWidth(minTextFieldWidth),
                     GUILayout.MaxWidth(maxTextFieldWidth)
                     );
                 //EditorGUILayout.EndHorizontal();
-            }EditorGUILayout.EndVertical();
+            }
+            EditorGUILayout.EndVertical();
             //GUILayout.EndArea();
             
 
@@ -241,19 +245,19 @@ public class LocalizeWindow : EditorWindow {
     //    return null;
     //}
 
-    public static string GetTextDebug(string selectedLanguage, string selectedDialog)
-    {
-        Dictionary<string, string> outLang = null;
-        if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
-        {
-            string outDialog;
-            if (outLang.TryGetValue(selectedDialog, out outDialog))
-            {
-                return outDialog;
-            }
-        }
-        return null;
-    }
+    //public static string GetTextDebug(string selectedLanguage, string selectedDialog)
+    //{
+    //    Dictionary<string, string> outLang = null;
+    //    if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
+    //    {
+    //        string outDialog;
+    //        if (outLang.TryGetValue(selectedDialog, out outDialog))
+    //        {
+    //            return outDialog;
+    //        }
+    //    }
+    //    return null;
+    //}
 
     //public string GetTextDebug(int selectedLanguage, string selectedDialog)
     //{
