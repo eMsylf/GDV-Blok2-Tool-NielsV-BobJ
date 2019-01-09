@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class LocalizationManager : MonoBehaviour {
+public class LocalizationManager
+{
 
 
     //JSOn laden vana t begin en alleen als je afsluit eruit laden?????????
     //Scriptable object kun je in editor aanpassen, tijdens runtime kun je het niet aanpassen en dient het alleen als data container.
     //Scriptable object houd dus niet de geselecteerde taal bij.
-    
+
     public static DataManager data;
     static string selectedLanguage;
     static string selectedDialog;
@@ -19,6 +20,35 @@ public class LocalizationManager : MonoBehaviour {
     string translatedText = "";
     public static List<string> options = new List<string>();
     public static List<string> popDialog = new List<string>();
+
+    public LocalizationManager()
+    {
+        //get scriptable object
+
+        //DataManager data = (DataManager)EditorGUIUtility.Load("AllText");
+        DataManager data = (DataManager)EditorGUIUtility.Load("Assets/Resources/AllText.asset");
+        //data = Resources.Load("AllText") as DataManager;
+        if (data.languages != null)
+        {
+            selectedLanguage = data.languages.Keys.FirstOrDefault();
+            Debug.Log("not empty");
+
+            Dictionary<string, string> outLang;
+            if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
+            {
+                selectedDialog = outLang.Keys.FirstOrDefault();
+            }
+            else
+            {
+                selectedDialog = "";
+            }
+        }
+    }
+
+    ~LocalizationManager()
+    {
+        //unload JSON
+    }
 
     /// <summary>
     /// Loads the selected dialog and returns the text from it.
@@ -102,8 +132,8 @@ public class LocalizationManager : MonoBehaviour {
     /// <param name="languageName"></param>
     public static void AddLang(string languageName)
     {
-        LocalizeWindow.data.languages.Add(languageName, new Dictionary<string, string>());
-        LocalizeWindow.options.Add(languageName);
+        data.languages.Add(languageName, new Dictionary<string, string>());
+        options.Add(languageName);
         Debug.Log("LanguageManager - Added new language: " + languageName);
     }
 
@@ -111,6 +141,14 @@ public class LocalizationManager : MonoBehaviour {
     /// Loading the text from a JSON file.
     /// </summary>
     public static void LoadText()
+    {
+
+    }
+
+    /// <summary>
+    /// Loading the text from a JSON file.
+    /// </summary>
+    public static void SaveText()
     {
 
     }
