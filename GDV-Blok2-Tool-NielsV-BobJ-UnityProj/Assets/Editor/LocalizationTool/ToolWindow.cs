@@ -72,25 +72,6 @@ public class LocalizeWindow : EditorWindow {
         EditorGUILayout.BeginHorizontal("box");
         Dictionary<string, string> outLang;
         List<string> popDialog = null;
-        if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang))
-        {
-            //selectedDialog = outLang.Keys.FirstOrDefault();
-            popDialog = outLang.Keys.ToList();
-        }
-        //List<string> popLang = data.languages.Keys.ToList();
-        if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight)))
-        {
-            // Debug.Log("Previous Text");
-            LocalizationManager.PreviousDialog();
-            //selectedDialog = popDialog[(selectPopDialog - 1 + totalDialog - 2) % (totalDialog - 2)];
-            //Debug.Log(selectedDialog);
-        }
-        if (GUILayout.Button("Next\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight)))
-        {
-            //Debug.Log("Next Text");
-            LocalizationManager.NextDialog();
-            //selectedDialog = popDialog[(selectPopDialog + 1) % (totalDialog - 2)];
-        }
 
         GUILayout.FlexibleSpace();
         
@@ -140,7 +121,7 @@ public class LocalizeWindow : EditorWindow {
             //GUILayout.BeginArea(new Rect(0.0f, minWindowHeight *5, GetWindow<LocalizeWindow>().position.size.x / 2, GetWindow<LocalizeWindow>().position.size.y));
             {
                 EditorGUILayout.LabelField("Original text", EditorStyles.boldLabel);
-                //EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.BeginHorizontal("box");
                 GUI.skin.label.wordWrap = true;
                 GUILayout.Label("Helo I am Beb and I am a Game Developer right now I'm trying to build a cool looking tool that is kinda easy to use but Unity is being a doodoo and I do not like it.", 
                     //GUIStyle.none,
@@ -149,7 +130,7 @@ public class LocalizeWindow : EditorWindow {
                     GUILayout.MinWidth(minTextFieldWidth),
                     GUILayout.MaxWidth(maxTextFieldWidth)
                     );
-                //EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
             }
             EditorGUILayout.EndVertical();
             //GUILayout.EndArea();
@@ -179,6 +160,23 @@ public class LocalizeWindow : EditorWindow {
 
         #region SaveLoad
         EditorGUILayout.BeginHorizontal();
+
+        if (GUILayout.Button("Next\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight))) {
+            //Debug.Log("Next Text");
+            LocalizationManager.NextDialog();
+            //selectedDialog = popDialog[(selectPopDialog + 1) % (totalDialog - 2)];
+        }
+        if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang)) {
+            //selectedDialog = outLang.Keys.FirstOrDefault();
+            popDialog = outLang.Keys.ToList();
+        }
+        //List<string> popLang = data.languages.Keys.ToList();
+        if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight))) {
+            // Debug.Log("Previous Text");
+            LocalizationManager.PreviousDialog();
+            //selectedDialog = popDialog[(selectPopDialog - 1 + totalDialog - 2) % (totalDialog - 2)];
+            //Debug.Log(selectedDialog);
+        }
         GUILayout.FlexibleSpace();
         /*
         if (GUILayout.Button("Load Text", GUILayout.Height(standardButtonHeight), GUILayout.Width(standardButtonWidth))) {
