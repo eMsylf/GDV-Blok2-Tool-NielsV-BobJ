@@ -34,7 +34,6 @@ public class AddLanguageWizard : EditorWindow {
             LocalizationManager.AddLang(languageName);
             tool.Repaint();
             this.Close();
-            Debug.Log("Added new language: " + languageName);
         }
 
 	}
