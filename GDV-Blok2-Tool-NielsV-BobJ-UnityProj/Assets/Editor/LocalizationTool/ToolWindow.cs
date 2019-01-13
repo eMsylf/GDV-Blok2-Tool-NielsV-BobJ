@@ -5,18 +5,18 @@ using UnityEditor;
 
 public class LocalizeWindow : EditorWindow {
 
-    public static DataManager data;
+    public static LocalizationManager manager;
 
-    private List<string> popDialog = null;
-    private Dictionary<string, string> outLang;
+    //private List<string> popDialog = null;
+    //private Dictionary<string, string> outLang;
 
-    static string selectedLanguage;
-    static string selectedDialog;
-    int selectedPopupLanguage = 0;
-    int selectedPopupDialog = 0;
-    public static int totalDialog = 3;
+    //static string selectedLanguage;
+    //static string selectedDialog;
+    //int selectedPopupLanguage = 0;
+    //int selectedPopupDialog = 0;
+    //public static int totalDialog = 3;
     string translatedText = "";
-    public static List<string> options = new List<string>();
+    //public static List<string> options = new List<string>();
     private static int prevNextButtonWidth = 65;
     private static int minWindowWidth = 32;
     private static int minWindowHeight = 18;
@@ -35,18 +35,21 @@ public class LocalizeWindow : EditorWindow {
 
     [MenuItem("Tools/Localization")]
     public static void Create() {
-        data = Resources.Load("AllText") as DataManager;
-        if (data.languages != null) {
-            selectedLanguage = data.languages.Keys.FirstOrDefault();
-            Debug.Log("not empty");
+        //LocalizationManager manager = new LocalizationManager();
+        LocalizationManager.Init();
+        //data = Resources.Load("AllText") as DataManager;
+        //if (data.languages != null) {
+        //    selectedLanguage = data.languages.Keys.FirstOrDefault();
+        //    Debug.Log("not empty");
 
-            Dictionary<string, string> outLang;
-            if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang)) {
-                selectedDialog = outLang.Keys.FirstOrDefault();
-            } else {
-                selectedDialog = "";
-            }
-        }
+        //    Dictionary<string, string> outLang;
+        //    if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang)) {
+        //        selectedDialog = outLang.Keys.FirstOrDefault();
+        //    } else {
+        //        selectedDialog = "";
+        //    }
+        //}
+
         //Debug.Log(Resources.Load("AllText") as DataManager);
         //selectedLanguage = data.languages.Keys.FirstOrDefault();
         //Dictionary<string, string> outLang;
@@ -75,7 +78,6 @@ public class LocalizeWindow : EditorWindow {
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Add Language", GUILayout.Width(120), GUILayout.Height(standardButtonHeight))) {
-                    Debug.Log("Added Language");
                     //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
                     AddLanguageWizard.Create(this);
                     //wizard.titleContent = GUIContent;
@@ -92,17 +94,26 @@ public class LocalizeWindow : EditorWindow {
             EditorGUILayout.BeginHorizontal(); {
                 Rect popup = new Rect(new Vector2(this.position.size.x - (2 * standardButtonWidth), 3.2f * EditorGUIUtility.singleLineHeight), new Vector2(2 * standardButtonWidth, EditorGUIUtility.singleLineHeight));
 
-                if (data.languages.Keys.Count > 0) {
-                    List<string> options = new List<string>(data.languages.Keys);
-                    List<string> popupLang = data.languages.Keys.ToList();
-                    selectedPopupLanguage = EditorGUI.Popup(popup, selectedPopupLanguage, options.ToArray());
-                    selectedLanguage = popupLang[selectedPopupLanguage];
-                } else {
-                    List<string> leeg = new List<string>() {
+                if (!LocalizationManager.isEmpty) {
+                    //List<string> options = new List<string>(data.languages.Keys);
+                    //List<string> popupLang = data.languages.Keys.ToList();
+
+                    //selectedPopupLanguage = EditorGUI.Popup(popup, selectedPopupLanguage, LocalizationManager.GetAvailableLanguages().ToArray());
+                    //selectedLanguage = LocalizationManager.GetAvailableLanguages()[selectedPopupLanguage];
+                    EditorGUI.BeginChangeCheck();
+                    SelectedLanguage.index = EditorGUI.Popup(popup, SelectedLanguage.index, LocalizationManager.GetAvailableLanguages().ToArray());
+                    SelectedLanguage.text = LocalizationManager.GetAvailableLanguages()[SelectedLanguage.index];
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        LocalizationManager.translatedText = LocalizationManager.GetDialog();
+                    }
+                }
+                else {
+                    List<string> empty = new List<string>() {
                         "<list is empty>"
                     };
-                    EditorGUI.Popup(popup, selectedPopupLanguage, leeg.ToArray());
-                    selectedDialog = "";
+                    EditorGUI.Popup(popup, SelectedLanguage.index, empty.ToArray());
+                    SelectedDialog.text = "";
                 }
             } EditorGUILayout.EndHorizontal();
             #endregion
@@ -115,7 +126,7 @@ public class LocalizeWindow : EditorWindow {
                     EditorGUILayout.LabelField("Original text", EditorStyles.boldLabel);
                     EditorGUILayout.BeginHorizontal("box"); { 
                         GUI.skin.label.wordWrap = true;
-                        GUILayout.Label("Helo I am Beb and I am a Game Developer right now I'm trying to build a cool looking tool that is kinda easy to use but Unity is being a doodoo and I do not like it.",
+                        GUILayout.Label(LocalizationManager.GetDialog(0),
                         //GUIStyle.none,
                         GUILayout.MinHeight(minTextFieldHeight),
                         GUILayout.MaxHeight(maxTextFieldHeight),
@@ -127,7 +138,7 @@ public class LocalizeWindow : EditorWindow {
 
                 EditorGUILayout.BeginVertical(); {
                     EditorGUILayout.LabelField("Translation", EditorStyles.boldLabel);
-                    translatedText = GUILayout.TextArea(translatedText,
+                    LocalizationManager.translatedText = GUILayout.TextArea(LocalizationManager.translatedText,
                         GUILayout.MinHeight(minTextFieldHeight),
                         GUILayout.MaxHeight(maxTextFieldHeight),
                         GUILayout.MinWidth(minTextFieldWidth),
@@ -141,31 +152,30 @@ public class LocalizeWindow : EditorWindow {
 
             #region Bottom Bar (Previous, Next, Save, Load)
             EditorGUILayout.BeginHorizontal(); {
-                if (GUILayout.Button("Next\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight))) {
-                    //Debug.Log("Next Text");
-                    LocalizationManager.NextDialog();
-                    //selectedDialog = popDialog[(selectPopDialog + 1) % (totalDialog - 2)];
-                }
-                if (selectedLanguage != null && data.languages.TryGetValue(selectedLanguage, out outLang)) {
-                    //selectedDialog = outLang.Keys.FirstOrDefault();
-                    popDialog = outLang.Keys.ToList();
-                }
-                //List<string> popLang = data.languages.Keys.ToList();
-                if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight))) {
+                if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight)))
+                {
                     // Debug.Log("Previous Text");
                     LocalizationManager.PreviousDialog();
                     //selectedDialog = popDialog[(selectPopDialog - 1 + totalDialog - 2) % (totalDialog - 2)];
                     //Debug.Log(selectedDialog);
                 }
+
+                if (GUILayout.Button("Next\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight))) {
+                    //Debug.Log("Next Text");
+                    LocalizationManager.NextDialog();
+                    //selectedDialog = popDialog[(selectPopDialog + 1) % (totalDialog - 2)];
+                }
+
                 GUILayout.FlexibleSpace();
                 /*
                 if (GUILayout.Button("Load Text", GUILayout.Height(standardButtonHeight), GUILayout.Width(standardButtonWidth))) {
                     Debug.Log("Loading All Text...");
+                    LocalizationManager.LoadText();
                 }
                 */
                 if (GUILayout.Button("Save Changes", GUILayout.Height(standardButtonHeight), GUILayout.Width(standardButtonWidth))) {
-                    Debug.Log("Saving Changes");
-                    //SaveTextDebug(translatedText);
+                    //Debug.Log("Saving Changes");
+                    LocalizationManager.SaveText();
                 }
             } EditorGUILayout.EndHorizontal();
             #endregion
