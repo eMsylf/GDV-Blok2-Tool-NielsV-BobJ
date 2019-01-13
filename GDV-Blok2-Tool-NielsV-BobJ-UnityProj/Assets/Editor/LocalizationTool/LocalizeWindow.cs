@@ -108,7 +108,8 @@ namespace LocalizationTool
                     EditorGUILayout.BeginVertical();
                     {
                         EditorGUILayout.LabelField("Translation", EditorStyles.boldLabel);
-                        LocalizationManager.translatedText = EditorGUILayout.TextField(LocalizationManager.translatedText,
+                        GUI.skin.textArea.wordWrap = true;
+                        LocalizationManager.translatedText = EditorGUILayout.TextArea(LocalizationManager.translatedText,
                             GUILayout.MinHeight(minTextFieldHeight),
                             GUILayout.MaxHeight(maxTextFieldHeight),
                             GUILayout.MinWidth(minTextFieldWidth),
