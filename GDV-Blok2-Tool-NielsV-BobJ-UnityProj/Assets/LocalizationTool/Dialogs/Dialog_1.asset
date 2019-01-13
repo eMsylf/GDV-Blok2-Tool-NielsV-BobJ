@@ -16,6 +16,12 @@ MonoBehaviour:
   - language: {fileID: 11400000, guid: 51968b9c691e89e4c86f1455bfebf848, type: 2}
     content: Wie geht's?
   - language: {fileID: 11400000, guid: 60067c0e1e39d5e4fa2d074243f5dbbe, type: 2}
-    content: How are you doing?
+    content: How are you?
   - language: {fileID: 11400000, guid: 3561e02915cd8c849873dd813eec0100, type: 2}
     content: Hoe gaat het?
+  - language: {fileID: 11400000, guid: 0b1d54f5918cd8449a33f3c7da99bde7, type: 2}
+    content: Hoe gaat het?
+  - language: {fileID: 0}
+    content: 
+  - language: {fileID: 11400000, guid: e449a2c2fc1d0364a886fba43c5e9663, type: 2}
+    content: 

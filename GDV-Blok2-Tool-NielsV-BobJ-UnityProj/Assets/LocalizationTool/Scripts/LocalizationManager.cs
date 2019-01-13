@@ -311,19 +311,21 @@ namespace LocalizationTool
         /// </summary>
         public static void SaveText()
         {
-            foreach (BaseDialog dia in dialogsList)
-            {
-                EditorUtility.SetDirty(dia);
-            }
+            if (dialogsList == null) {
+                Debug.Log("Please add a language first.");
+            } else {
+                foreach (BaseDialog dia in dialogsList) {
+                    EditorUtility.SetDirty(dia);
+                }
 
-            foreach (Language lang in languagesList)
-            {
-                EditorUtility.SetDirty(lang);
+                foreach (Language lang in languagesList) {
+                    EditorUtility.SetDirty(lang);
+                }
+                SetDialog();
+                AssetDatabase.SaveAssets();
+                Debug.Log("Localization Manager: Trying to save changes");
+                JSONSaver.SaveDictionary(dialogsList);
             }
-            SetDialog();
-            AssetDatabase.SaveAssets();
-            Debug.Log("Localization Manager: Trying to save changes");
-            JSONSaver.SaveDictionary(dialogsList);
         }
     }
 }

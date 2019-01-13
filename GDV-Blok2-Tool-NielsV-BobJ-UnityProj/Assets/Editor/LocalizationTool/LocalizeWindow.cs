@@ -6,6 +6,8 @@ namespace LocalizationTool
 {
     public class LocalizeWindow : EditorWindow
     {
+        
+
         //string translatedText = "";
         private static int prevNextButtonWidth = 65;
         private static int minWindowWidth = 32;
@@ -30,6 +32,8 @@ namespace LocalizationTool
 
         public void OnGUI()
         {
+            Input.imeCompositionMode = IMECompositionMode.Auto;
+
             EditorGUILayout.BeginVertical();
             {
 
@@ -104,7 +108,7 @@ namespace LocalizationTool
                     EditorGUILayout.BeginVertical();
                     {
                         EditorGUILayout.LabelField("Translation", EditorStyles.boldLabel);
-                        LocalizationManager.translatedText = GUILayout.TextArea(LocalizationManager.translatedText,
+                        LocalizationManager.translatedText = EditorGUILayout.TextField(LocalizationManager.translatedText,
                             GUILayout.MinHeight(minTextFieldHeight),
                             GUILayout.MaxHeight(maxTextFieldHeight),
                             GUILayout.MinWidth(minTextFieldWidth),

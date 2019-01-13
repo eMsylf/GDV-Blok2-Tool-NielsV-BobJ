@@ -9,21 +9,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66bc1a03c89a4944caec45c6c7d3c7e3, type: 3}
-  m_Name: Dialog_0
+  m_Name: Dialog_2
   m_EditorClassIdentifier: 
   gameOptions: {fileID: 11400000, guid: 1cb89a9a7541e3349b40b82e404153e2, type: 2}
   dialogWrapper:
   - language: {fileID: 11400000, guid: 51968b9c691e89e4c86f1455bfebf848, type: 2}
-    content: Good afternoon everyone!
+    content: 
   - language: {fileID: 11400000, guid: 60067c0e1e39d5e4fa2d074243f5dbbe, type: 2}
-    content: 'hallo
-
-'
+    content: 
+  - language: {fileID: 11400000, guid: 1520b92657fcf4b48bc735c0c8bd2ffa, type: 2}
+    content: 
   - language: {fileID: 11400000, guid: 3561e02915cd8c849873dd813eec0100, type: 2}
-    content: Bonjour les gens!
+    content: 
   - language: {fileID: 11400000, guid: 0b1d54f5918cd8449a33f3c7da99bde7, type: 2}
-    content: Goedenmiddag iedereen!
+    content: 
   - language: {fileID: 0}
-    content: Ik kan geen regels meer breken
+    content: 
   - language: {fileID: 11400000, guid: e449a2c2fc1d0364a886fba43c5e9663, type: 2}
     content: 

@@ -37,7 +37,7 @@ public class LocalizeWindow : EditorWindow {
     public static void Create() {
         manager = new LocalizationManager();
         //LocalizationManager.Init();
-       
+
         //data = Resources.Load("AllText") as DataManager;
         //if (data.languages != null) {
         //    selectedLanguage = data.languages.Keys.FirstOrDefault();
@@ -64,7 +64,8 @@ public class LocalizeWindow : EditorWindow {
     }
 
     public void OnGUI() {
-        EditorGUILayout.BeginVertical(); {
+        EditorGUILayout.BeginVertical();
+        {
 
             //#region ObjectField
             //Object dataObj = null;
@@ -73,8 +74,9 @@ public class LocalizeWindow : EditorWindow {
             //#endregion
 
             #region Top Bar (Add Language)
-            EditorGUILayout.BeginHorizontal("box"); {
-                
+            EditorGUILayout.BeginHorizontal("box");
+            {
+
 
                 GUILayout.FlexibleSpace();
 
@@ -87,12 +89,14 @@ public class LocalizeWindow : EditorWindow {
                     //wizard = AddLanguageWizard.CreateInstance<AddLanguageWizard>();
                     //AddLanguageWizard.Create("Add Language");
                 }
-            } EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndHorizontal();
 
             #endregion
 
             #region Popup/Dropdown Languages
-            EditorGUILayout.BeginHorizontal(); {
+            EditorGUILayout.BeginHorizontal();
+            {
                 Rect popup = new Rect(new Vector2(this.position.size.x - (2 * standardButtonWidth), 3.2f * EditorGUIUtility.singleLineHeight), new Vector2(2 * standardButtonWidth, EditorGUIUtility.singleLineHeight));
 
                 if (!LocalizationManager.isEmpty) {
@@ -104,28 +108,30 @@ public class LocalizeWindow : EditorWindow {
                     EditorGUI.BeginChangeCheck();
                     SelectedLanguage.index = EditorGUI.Popup(popup, SelectedLanguage.index, LocalizationManager.GetAvailableLanguages().ToArray());
                     SelectedLanguage.text = LocalizationManager.GetAvailableLanguages()[SelectedLanguage.index];
-                    if (EditorGUI.EndChangeCheck())
-                    {
+                    if (EditorGUI.EndChangeCheck()) {
                         LocalizationManager.translatedText = LocalizationManager.GetDialog();
                     }
-                }
-                else {
+                } else {
                     List<string> empty = new List<string>() {
                         "<list is empty>"
                     };
                     EditorGUI.Popup(popup, SelectedLanguage.index, empty.ToArray());
                     SelectedDialog.text = "";
                 }
-            } EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndHorizontal();
             #endregion
 
             EditorGUILayout.Space(); EditorGUILayout.Space();
 
             #region TextBoxes (Original Text, Translation)
-            EditorGUILayout.BeginHorizontal(); {
-                EditorGUILayout.BeginVertical(); {
+            EditorGUILayout.BeginHorizontal();
+            {
+                EditorGUILayout.BeginVertical();
+                {
                     EditorGUILayout.LabelField("Original text", EditorStyles.boldLabel);
-                    EditorGUILayout.BeginHorizontal("box"); { 
+                    EditorGUILayout.BeginHorizontal("box");
+                    {
                         GUI.skin.label.wordWrap = true;
                         GUILayout.Label(LocalizationManager.GetDialog(0),
                         //GUIStyle.none,
@@ -134,27 +140,32 @@ public class LocalizeWindow : EditorWindow {
                         GUILayout.MinWidth(minTextFieldWidth),
                         GUILayout.MaxWidth(maxTextFieldWidth)
                         );
-                    }EditorGUILayout.EndHorizontal();
-                } EditorGUILayout.EndVertical();
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.EndVertical();
 
-                EditorGUILayout.BeginVertical(); {
+                EditorGUILayout.BeginVertical();
+                {
                     EditorGUILayout.LabelField("Translation", EditorStyles.boldLabel);
-                    LocalizationManager.translatedText = GUILayout.TextArea(LocalizationManager.translatedText,
+                    LocalizationManager.translatedText = EditorGUILayout.TextField(LocalizationManager.translatedText,
                         GUILayout.MinHeight(minTextFieldHeight),
                         GUILayout.MaxHeight(maxTextFieldHeight),
                         GUILayout.MinWidth(minTextFieldWidth),
                         GUILayout.MaxWidth(maxTextFieldWidth)
                         );
-                } EditorGUILayout.EndVertical();
-            } EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.EndVertical();
+            }
+            EditorGUILayout.EndHorizontal();
             #endregion
 
             GUILayout.FlexibleSpace();
 
             #region Bottom Bar (Previous, Next, Save, Load)
-            EditorGUILayout.BeginHorizontal(); {
-                if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight)))
-                {
+            EditorGUILayout.BeginHorizontal();
+            {
+                if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight))) {
                     // Debug.Log("Previous Text");
                     LocalizationManager.PreviousDialog();
                     //selectedDialog = popDialog[(selectPopDialog - 1 + totalDialog - 2) % (totalDialog - 2)];
@@ -178,10 +189,12 @@ public class LocalizeWindow : EditorWindow {
                     //Debug.Log("Saving Changes");
                     LocalizationManager.SaveText();
                 }
-            } EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndHorizontal();
             #endregion
 
-        } EditorGUILayout.EndVertical();
+        }
+        EditorGUILayout.EndVertical();
     }
 
     //public void SaveTextDebug(string text)
