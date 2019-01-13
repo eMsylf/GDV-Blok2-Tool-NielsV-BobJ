@@ -6,9 +6,6 @@ namespace LocalizationTool
 {
     public class LocalizeWindow : EditorWindow
     {
-        
-
-        //string translatedText = "";
         private static int prevNextButtonWidth = 65;
         private static int minWindowWidth = 32;
         private static int minWindowHeight = 18;
@@ -32,7 +29,7 @@ namespace LocalizationTool
 
         public void OnGUI()
         {
-            Input.imeCompositionMode = IMECompositionMode.Auto;
+            //Input.imeCompositionMode = IMECompositionMode.Auto;
 
             EditorGUILayout.BeginVertical();
             {
@@ -63,8 +60,11 @@ namespace LocalizationTool
                     {
                         EditorGUI.BeginChangeCheck();
                         string previousSelected = SelectedLanguage.index.ToString();
-                        SelectedLanguage.index = EditorGUI.Popup(popup, SelectedLanguage.index, LocalizationManager.GetAvailableLanguages().ToArray());
-                        SelectedLanguage.text = LocalizationManager.GetAvailableLanguages()[SelectedLanguage.index];
+                        if (LocalizationManager.GetAvailableLanguages().Count > 0)
+                        {
+                            SelectedLanguage.index = EditorGUI.Popup(popup, SelectedLanguage.index, LocalizationManager.GetAvailableLanguages().ToArray());
+                            SelectedLanguage.text = LocalizationManager.GetAvailableLanguages()[SelectedLanguage.index];
+                        }
                         if (EditorGUI.EndChangeCheck())
                         {
                             LocalizationManager.translatedText = LocalizationManager.GetDialog(previousSelected);
@@ -124,16 +124,19 @@ namespace LocalizationTool
                 GUILayout.FlexibleSpace();
 
                 #region Bottom Bar (Previous, Next, Save, Load)
+                GUI.SetNextControlName("Buttons");
                 EditorGUILayout.BeginHorizontal();
                 {
                     if (GUILayout.Button("Previous\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight)))
                     {
                         LocalizationManager.PreviousDialog();
+                        GUI.FocusControl("Buttons");
                     }
 
                     if (GUILayout.Button("Next\ntext", GUILayout.Width(prevNextButtonWidth), GUILayout.Height(standardButtonHeight)))
                     {
                         LocalizationManager.NextDialog();
+                        GUI.FocusControl("Buttons");
                     }
 
                     GUILayout.FlexibleSpace();

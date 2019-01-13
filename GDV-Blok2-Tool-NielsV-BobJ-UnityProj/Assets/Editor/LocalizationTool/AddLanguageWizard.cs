@@ -29,8 +29,10 @@ namespace LocalizationTool
         private void OnGUI()
         {
             Event e = Event.current;
-            
+
+            GUI.SetNextControlName("AddLanguageField");
             languageName = EditorGUILayout.TextField(languageName, GUILayout.Height(position.height - 30), GUILayout.Height(textFieldSize));
+            EditorGUI.FocusTextInControl("AddLanguageField");
 
             if (GUILayout.Button("Add") || (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
             {
