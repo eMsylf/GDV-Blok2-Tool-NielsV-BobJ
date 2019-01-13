@@ -30,13 +30,17 @@ namespace LocalizationTool
         public static string languagesPath = "Assets/LocalizationTool/Languages";
         public static string dialogsPath = "Assets/LocalizationTool/Dialogs";
         
-        public static int totalDialog = 0;
+        //public static int totalDialog = 0;
         public static string translatedText = "";
-        public static List<string> languageOptions = new List<string>();
-        public static List<string> dialogOptions = new List<string>();
+        //public static List<string> languageOptions = new List<string>();
+        //public static List<string> dialogOptions = new List<string>();
 
         public static void Init()
         {
+            SelectedDialog.index = 0;
+            SelectedDialog.text = "";
+            SelectedLanguage.index = 0;
+            SelectedLanguage.text = "";
             dialogsList = new List<BaseDialog>();
             languagesList = new List<Language>();
             string[] assetsGUIDs = AssetDatabase.FindAssets("t:BaseDialog", new[] { "Assets/LocalizationTool/Dialogs" });
@@ -54,6 +58,7 @@ namespace LocalizationTool
             if (languagesList.Count > 0)
             {
                 selectedLanguage = languagesList[0];
+                SelectedLanguage.text = selectedLanguage.LanguageName;
             } else
             {
                 Debug.LogWarning("Localization Manager: No languages available yet, please add one or multiple");
@@ -62,6 +67,7 @@ namespace LocalizationTool
             if (dialogsList.Count > 0)
             {
                 selectedDialog = dialogsList[0];
+                SelectedDialog.text = selectedDialog.name;
             }
             else
             {
@@ -71,14 +77,6 @@ namespace LocalizationTool
             Debug.Log("Localization Manager: Initialized");
             Debug.Log("Localization Manager: Text Object Found.");
 
-            if (dialogsList.Count > 0)
-            {
-                SelectedDialog.text = dialogsList[0].name;
-            }
-            else
-            {
-                SelectedDialog.text = "";
-            }
             translatedText = GetDialog();
         }
 
@@ -133,11 +131,12 @@ namespace LocalizationTool
                 selectedDialog.dialogWrapper[SelectedLanguage.index].content = translatedText;
                 Debug.Log("Localization Manager: Saved dialog in language: " + selectedLanguage.LanguageName);
                 return true;
-            } else
-            {
-                AddDialog("", translatedText);
-                return true;
             }
+            return false; //else
+            //{
+            //    AddDialog("", translatedText);
+            //    return true;
+            //}
         }
 
         /// <summary>
@@ -187,13 +186,15 @@ namespace LocalizationTool
         {
             SetDialog();
             SelectedDialog.index += 1;
+            Debug.Log(SelectedDialog.index + " -- " + (dialogsList.Count -1));
             if (SelectedDialog.index > dialogsList.Count - 1)
             {
-                AddDialog("Dialog-" + totalDialog, "");
-                SelectedDialog.index -= 1;
+                AddDialog("Dialog-" + dialogsList.Count, "");
+                //SelectedDialog.index -= 1;
             } else
             {
                 SelectedDialog.text = dialogsList[SelectedDialog.index].name;
+                selectedDialog = dialogsList[SelectedDialog.index];
             }
             translatedText = GetDialog();
             Debug.Log("Localization Manager: Next Dialog Selected: " + SelectedDialog.text);
@@ -216,6 +217,7 @@ namespace LocalizationTool
                 SelectedDialog.text = dialogsList[SelectedDialog.index].name;
             }
             translatedText = GetDialog();
+            //selectedDialog = dialogsList[SelectedDialog.index];
             Debug.Log("Localization Manager: Previous Dialog Selected: " + SelectedDialog.text);
         }
 
@@ -227,7 +229,7 @@ namespace LocalizationTool
         {
             Language newLanguage = (Language)ScriptableObject.CreateInstance("Language");// new Language();
             newLanguage.LanguageName = languageName;
-            Debug.Log(languagesList + " -- " + newLanguage);
+            Debug.Log(languagesList + " -- " + newLanguage.LanguageName);
             languagesList.Add(newLanguage);
             foreach (BaseDialog dia in dialogsList)
             {
@@ -240,9 +242,12 @@ namespace LocalizationTool
                 dia.dialogWrapper.Add(newDialogWrapper);
             }
             AssetDatabase.CreateAsset(newLanguage, languagesPath + "/Language_" + languageName + ".asset");
-            languageOptions.Add(languageName);
+            //languageOptions.Add(languageName);
+            selectedLanguage = newLanguage;
             SelectedLanguage.text = languageName;
-            SelectedLanguage.index = languageOptions.Count - 1;
+            SelectedLanguage.index = languagesList.Count - 1; //SelectedLanguage.index = languageOptions.Count - 1;
+            translatedText = GetDialog();
+            AddDialog("", "");
             Debug.Log("Localization Manager: Added new language: " + languageName);
         }
 
@@ -252,15 +257,15 @@ namespace LocalizationTool
         /// <param name="languageName"></param>
         public static void AddDialog(string dialogName, string dialogText)
         {
-            if (translatedText != "")
+            if (translatedText != "" || dialogsList.Count == 0)
             {
                 BaseDialog newDialog = (BaseDialog)ScriptableObject.CreateInstance("BaseDialog");
+                if (newDialog.dialogWrapper == null)
+                {
+                    newDialog.dialogWrapper = new List<BaseDialogWrapper>();
+                }
                 foreach (Language lang in languagesList)
                 {
-                    if (newDialog.dialogWrapper == null)
-                    {
-                        newDialog.dialogWrapper = new List<BaseDialogWrapper>();
-                    }
                     if (lang.LanguageName == selectedLanguage.LanguageName)
                     {
 
@@ -283,17 +288,17 @@ namespace LocalizationTool
                         newDialog.dialogWrapper.Add(newDialogWrapper);
                     }
                 }
-
-                //newDialog.myOp
+                
                 dialogsList.Add(newDialog);
                 AssetDatabase.CreateAsset(newDialog, dialogsPath + "/Dialog_" + (dialogsList.Count - 1) + ".asset");
                 Debug.Log(dialogText + " -- " + newDialog);
 
                 dialogName = "Dialog_" + (dialogsList.Count - 1);
-                dialogOptions.Add(dialogName);
+                selectedDialog = newDialog;
+                //dialogOptions.Add(dialogName);
                 SelectedDialog.text = dialogName;
-                SelectedDialog.index = dialogOptions.Count - 1;
-                totalDialog += 1;
+                SelectedDialog.index = dialogsList.Count - 1;
+                //totalDialog += 1;
                 Debug.Log("Localization Manager: Added new dialog: " + dialogName + " - " + SelectedDialog.index);
             }
         }
@@ -311,19 +316,22 @@ namespace LocalizationTool
         /// </summary>
         public static void SaveText()
         {
-            foreach (BaseDialog dia in dialogsList)
-            {
-                EditorUtility.SetDirty(dia);
-            }
+            if (languagesList.Count == 0) {
+                Debug.Log("Please add a language first.");
+            } else {
+                foreach (BaseDialog dia in dialogsList) {
+                    EditorUtility.SetDirty(dia);
+                }
 
-            foreach (Language lang in languagesList)
-            {
-                EditorUtility.SetDirty(lang);
+                foreach (Language lang in languagesList) {
+                    EditorUtility.SetDirty(lang);
+                }
+                SetDialog();
+                Debug.Log("Localization Manager: Trying to save changes");
+                JSONSaver.SaveDictionary(dialogsList);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
-            SetDialog();
-            AssetDatabase.SaveAssets();
-            Debug.Log("Localization Manager: Trying to save changes");
-            JSONSaver.SaveDictionary(dialogsList);
         }
     }
 }

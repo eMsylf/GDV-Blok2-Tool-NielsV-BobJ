@@ -13,9 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOptions: {fileID: 11400000, guid: 1cb89a9a7541e3349b40b82e404153e2, type: 2}
   dialogWrapper:
-  - language: {fileID: 11400000, guid: 51968b9c691e89e4c86f1455bfebf848, type: 2}
-    content: Guten Nachmittag leute!
   - language: {fileID: 11400000, guid: 60067c0e1e39d5e4fa2d074243f5dbbe, type: 2}
-    content: Good afternoon everyone!
+    content: Hello everyone!
   - language: {fileID: 11400000, guid: 3561e02915cd8c849873dd813eec0100, type: 2}
-    content: Goedenmiddag iedereen!
+    content: Hallo iedereen!
+  - language: {fileID: 11400000, guid: 51968b9c691e89e4c86f1455bfebf848, type: 2}
+    content: Hallo Leute!
