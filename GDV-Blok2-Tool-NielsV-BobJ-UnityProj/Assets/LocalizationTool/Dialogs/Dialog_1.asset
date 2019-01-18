@@ -14,8 +14,6 @@ MonoBehaviour:
   gameOptions: {fileID: 11400000, guid: 1cb89a9a7541e3349b40b82e404153e2, type: 2}
   dialogWrapper:
   - language: {fileID: 11400000, guid: 60067c0e1e39d5e4fa2d074243f5dbbe, type: 2}
-    content: This is a second text.
-  - language: {fileID: 11400000, guid: 3561e02915cd8c849873dd813eec0100, type: 2}
-    content: Dit is een tweede tekst.
-  - language: {fileID: 11400000, guid: 51968b9c691e89e4c86f1455bfebf848, type: 2}
-    content: 
+    content: How are you today?
+  - language: {fileID: 11400000, guid: 4bd1acbdc7a56c143b859d455b230992, type: 2}
+    content: Goed.

@@ -64,6 +64,45 @@ namespace LocalizationTool
 
             Debug.Log("Localization Manager: Changes saved to JSON!");
         }
+
+        //public static List<BaseDialog> LoadDictionary(List<BaseDialog> dialogsList)
+        //{
+        //    DataContainer languages = new DataContainer();
+
+        //    foreach (BaseDialogWrapper language in dialogsList[0].dialogWrapper)
+        //    {
+        //        DoubleDictionaryContainer languageData = new DoubleDictionaryContainer
+        //        {
+        //            Language = language.language.LanguageName
+        //        };
+
+
+        //        foreach (BaseDialog dialog in dialogsList)
+        //        {
+        //            DictionaryContainer dialogData = new DictionaryContainer
+        //            {
+        //                DialogName = dialog.name,
+        //                DialogContent = dialog.dialogWrapper.Find(l => l.language.LanguageName == language.language.LanguageName).content
+        //            };
+        //            languageData.Dialogs.Add(dialogData);
+        //        }
+        //        languages.AvailableLanguages.Add(languageData);
+        //    }
+
+
+
+            
+
+        //    //Finally write the json string to a file
+        //    string filePath = Application.dataPath + "/Resources/Localization/LocalizationData.json";
+        //    string jsonData = File.ReadAllText(filePath);
+        //    //Convert object to JSON
+        //    //List<BaseDialog> languages = JsonUtility.FromJson(jsonData);
+
+        //    return List<>;
+
+        //    Debug.Log("Localization Manager: Changes saved to JSON!");
+        //}
     }
 }
 

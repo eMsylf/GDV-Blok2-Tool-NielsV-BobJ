@@ -13,12 +13,21 @@ namespace LocalizationTool
 
         void OnEnable()
         {
-            dialog.Subscribe(SetText);
+            if (dialog == null)
+            {
+                Debug.LogError("DialogComponent: There is no BaseDialog selected!");
+                this.enabled = false;
+            }
+            else
+            {
+                dialog.Subscribe(SetText);
+            }
         }
 
         void OnDisable()
         {
-            dialog.Unsubscribe(SetText);
+            if (dialog != null)
+                dialog.Unsubscribe(SetText);
         }
 
         void Start()

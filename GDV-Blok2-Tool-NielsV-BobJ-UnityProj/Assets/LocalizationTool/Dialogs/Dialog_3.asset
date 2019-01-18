@@ -9,11 +9,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66bc1a03c89a4944caec45c6c7d3c7e3, type: 3}
-  m_Name: Dialog_0
+  m_Name: Dialog_3
   m_EditorClassIdentifier: 
   gameOptions: {fileID: 11400000, guid: 1cb89a9a7541e3349b40b82e404153e2, type: 2}
   dialogWrapper:
   - language: {fileID: 11400000, guid: 60067c0e1e39d5e4fa2d074243f5dbbe, type: 2}
-    content: Hello everyone!
+    content: 
   - language: {fileID: 11400000, guid: 4bd1acbdc7a56c143b859d455b230992, type: 2}
-    content: Hallo iedereen!
+    content: 
