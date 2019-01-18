@@ -91,6 +91,7 @@ namespace LocalizationTool
                 Debug.Log(dialogsList[0].name + " -- " + SelectedDialog.text);
                 selectedDialog = dialogsList.Find(dialog => dialog.name == SelectedDialog.text);
                 Debug.Log(selectedDialog);
+                Debug.Log("abc " + selectedDialog.Content(selectedLanguage));
                 return selectedDialog.Content(selectedLanguage);
             }
             return "";
@@ -308,7 +309,48 @@ namespace LocalizationTool
         /// </summary>
         public static void LoadText()
         {
+            string[] optionsGUIDs = AssetDatabase.FindAssets("t:SystemOptions", new[] { "Assets/LocalizationTool" });
+  
+            dialogsList = JSONSaver.LoadDictionary((SystemOptions)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(optionsGUIDs[0]), typeof(SystemOptions)));
+            foreach (BaseDialog dia in dialogsList)
+            {
+                Debug.LogWarning(dia.name + " -- " + dia.dialogWrapper[0].language.LanguageName + " // " + dia.dialogWrapper[0].content);
+            }
 
+            languagesList = new List<Language>();
+            foreach (BaseDialogWrapper lang in dialogsList[0].dialogWrapper)
+            {
+                //string[] langGUIDs = AssetDatabase.FindAssets(lang.language.name + " t:Language", new[] { "Assets/LocalizationTool/Languages" });
+                //if (langGUIDs.Length == 0)
+                //{
+                //    AssetDatabase.CreateAsset(lang.language, languagesPath + "/" + lang.language.name + ".asset");
+                //    //savedDialog = (BaseDialog)AssetDatabase.LoadAssetAtPath(dialogsPath + "/" + dia.name + ".asset", typeof(BaseDialog));
+                //} else
+                //{
+                //    //load
+                //}
+                //languagesList = (Language)AssetDatabase.LoadAssetAtPath(languagesPath + "/" + w.language.name + ".asset", typeof(Language));
+                Language language = ScriptableObject.CreateInstance("Language") as Language;
+                language.name = "Language_" + lang.language.LanguageName;
+                language.LanguageName = lang.language.LanguageName;
+                languagesList.Add(language);
+
+            }
+            foreach (Language l in languagesList)
+            {
+                Debug.LogWarning(l.name + " || " + l.LanguageName);
+            }
+
+            selectedLanguage = languagesList[0];
+            SelectedLanguage.text = languagesList[0].LanguageName;
+            SelectedLanguage.index = 0; //SelectedLanguage.index = languageOptions.Count - 1;
+
+            selectedDialog = dialogsList[0];
+            SelectedDialog.index = 0;
+            SelectedDialog.text = dialogsList[0].name;
+            translatedText = GetDialog();
+            //AddDialog("", "");
+            //Debug.Log("Localization Manager: Added new language: " + languageName);
         }
 
         /// <summary>
@@ -319,6 +361,34 @@ namespace LocalizationTool
             if (languagesList.Count == 0) {
                 Debug.Log("Please add a language first.");
             } else {
+                foreach (BaseDialog dia in dialogsList)
+                {
+                    BaseDialog savedDialog;
+
+                    string[] guids = AssetDatabase.FindAssets(dia.name + " t:BaseDialog", new[] { "Assets/LocalizationTool/Dialogs" });
+                    if (guids.Length == 0)
+                    {
+                        AssetDatabase.CreateAsset(dia, dialogsPath + "/" + dia.name + ".asset");
+                        savedDialog = (BaseDialog)AssetDatabase.LoadAssetAtPath(dialogsPath + "/" + dia.name + ".asset", typeof(BaseDialog));
+                    }
+                    else
+                    {
+                        savedDialog = (BaseDialog)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guids[0]), typeof(BaseDialog));
+                        savedDialog.dialogWrapper = dia.dialogWrapper;
+                    }
+
+                    //Update Language Objects
+                    foreach (BaseDialogWrapper w in savedDialog.dialogWrapper)
+                    {
+                        string[] langGuids = AssetDatabase.FindAssets(w.language.name + " t:Language", new[] { "Assets/LocalizationTool/Languages" });
+                        if (langGuids.Length == 0)
+                        {
+                            AssetDatabase.CreateAsset(w.language, languagesPath + "/" + w.language.name + ".asset");
+                        }
+                        w.language = (Language)AssetDatabase.LoadAssetAtPath(languagesPath + "/" + w.language.name + ".asset", typeof(Language));
+                    }
+                }
+
                 foreach (BaseDialog dia in dialogsList) {
                     EditorUtility.SetDirty(dia);
                 }
