@@ -37,6 +37,14 @@ namespace LocalizationTool
 
         public static void Init()
         {
+            if (!AssetDatabase.IsValidFolder(languagesPath))
+            {
+                AssetDatabase.CreateFolder(languagesPath.Replace("/Languages", ""), "Languages");
+            }
+            if (!AssetDatabase.IsValidFolder(dialogsPath))
+            {
+                AssetDatabase.CreateFolder(dialogsPath.Replace("/Dialogs", ""), "Dialogs");
+            }
             SelectedDialog.index = 0;
             SelectedDialog.text = "";
             SelectedLanguage.index = 0;

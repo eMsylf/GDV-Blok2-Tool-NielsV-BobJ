@@ -39,7 +39,7 @@ namespace LocalizationTool
 
         void SetText()
         {
-            UnityEditor.EditorUtility.SetDirty(dialog); //Saving the scriptable wizard just to be sure
+            //UnityEditor.EditorUtility.SetDirty(dialog); //Saving the scriptable wizard just to be sure
             
             textComponent.text = dialog.Content();
         }

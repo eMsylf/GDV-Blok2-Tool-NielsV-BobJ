@@ -2,6 +2,7 @@
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEditor;
 
 namespace LocalizationTool
 {
@@ -60,6 +61,16 @@ namespace LocalizationTool
 
             //Finally write the json string to a file
             string filePath = Application.dataPath + "/Resources/Localization/LocalizationData.json";
+
+            if (!AssetDatabase.IsValidFolder("Assets/Resources/Localization"))
+            {
+                if (!AssetDatabase.IsValidFolder("Assets/Resources"))
+                {
+                    AssetDatabase.CreateFolder("Assets", "Resources");
+                } 
+                AssetDatabase.CreateFolder("Assets/Resources", "Localization");
+            }
+
             File.WriteAllText(filePath, jsonData);
 
             Debug.Log("JSONSaver: Changes saved to JSON!");
