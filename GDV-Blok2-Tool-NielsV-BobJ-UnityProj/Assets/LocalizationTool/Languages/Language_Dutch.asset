@@ -9,6 +9,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af32ec34cafd9114b9f9179b7801e53a, type: 3}
-  m_Name: Language_Deutsch
+  m_Name: Language_Dutch
   m_EditorClassIdentifier: 
-  LanguageName: Deutsch
+  LanguageName: Dutch
