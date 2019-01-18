@@ -5354,7 +5354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e3f350b0ccf7f84a813dd6e8f86d384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialog: {fileID: 11400000, guid: 1f75a4fb98cfe0643a0fa1d47e248312, type: 2}
+  dialog: {fileID: 0}
 --- !u!114 &1086831331
 MonoBehaviour:
   m_ObjectHideFlags: 0
