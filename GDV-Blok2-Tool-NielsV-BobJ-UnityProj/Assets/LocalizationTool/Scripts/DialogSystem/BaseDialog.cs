@@ -15,6 +15,11 @@ namespace LocalizationTool
 
         bool initialized = false;
 
+        public void Init(SystemOptions options)
+        {
+            gameOptions = options;
+        }
+
         public string Content()
         {
             if (!initialized)
@@ -23,7 +28,7 @@ namespace LocalizationTool
             }
             for (int i = 0; i < dialogWrapper.Count; i++)
             {
-                if (gameOptions.currentLanguage == dialogWrapper[i].language)
+                if (gameOptions.currentLanguage.LanguageName == dialogWrapper[i].language.LanguageName)
                     return dialogWrapper[i].content;
             }
             return "";
@@ -37,8 +42,7 @@ namespace LocalizationTool
             }
             for (int i = 0; i < dialogWrapper.Count; i++)
             {
-                Debug.Log(currentLanguage, dialogWrapper[i].language);
-                if (currentLanguage == dialogWrapper[i].language)
+                if (currentLanguage.LanguageName == dialogWrapper[i].language.LanguageName)
                     return dialogWrapper[i].content;
             }
             return "";

@@ -140,12 +140,14 @@ namespace LocalizationTool
                     }
 
                     GUILayout.FlexibleSpace();
-                    /*
-                    if (GUILayout.Button("Load Text", GUILayout.Height(standardButtonHeight), GUILayout.Width(standardButtonWidth))) {
+
+                    if (GUILayout.Button("Load Text", GUILayout.Height(standardButtonHeight), GUILayout.Width(standardButtonWidth)))
+                    {
                         Debug.Log("Loading All Text...");
                         LocalizationManager.LoadText();
+                        //this.Repaint();
                     }
-                    */
+
                     if (GUILayout.Button("Save Changes", GUILayout.Height(standardButtonHeight), GUILayout.Width(standardButtonWidth)))
                     {
                         LocalizationManager.SaveText();
